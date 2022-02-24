@@ -10,6 +10,7 @@ namespace FlightPlanner.Storage
         private static List<Flight> _flights = new List<Flight>();
         private static int _id;
         private static readonly object _lock = new object();
+        private static readonly FlightPlannerDbContext _context;
 
         public static Flight AddFlight(AddFlightRequest request)
         {
@@ -30,6 +31,23 @@ namespace FlightPlanner.Storage
             }
         }
 
+        public static Flight ConvertToFlight(AddFlightRequest request)
+        {
+            lock (_lock)
+            {
+                var flight = new Flight
+                {
+                    From = request.From,
+                    To = request.To,
+                    ArrivalTime = request.ArrivalTime,
+                    DepartureTime = request.DepartureTime,
+                    Carrier = request.Carrier,
+                };
+
+                return flight;
+            }
+        }
+
         public static PageResult SearchFlightReq(SearchFlightRequest request)
         {
             lock (_lock)
@@ -38,7 +56,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static List<Airport> SearchAiport(string search)
+        public static List<Airport> SearchAirport(string search)
         {
             lock (_lock)
             {
@@ -147,5 +165,7 @@ namespace FlightPlanner.Storage
                 return true;
             }
         }
+
+
     }
 }
