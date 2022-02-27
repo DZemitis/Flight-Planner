@@ -44,7 +44,7 @@ namespace FlightPlanner.Controllers
                     return BadRequest();
                 }
 
-                return Ok(FlightStorage.SearchFlightReq(request));
+                return Ok(FlightStorage.SearchFlightReq(request, _context));
             }
         }
 

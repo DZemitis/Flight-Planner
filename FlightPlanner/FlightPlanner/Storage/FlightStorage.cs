@@ -48,11 +48,16 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static PageResult SearchFlightReq(SearchFlightRequest request)
+        public static PageResult SearchFlightReq(SearchFlightRequest request, FlightPlannerDbContext context)
         {
             lock (_lock)
             {
-                return new PageResult(_flights);
+                var flights = context.Flights.Where(x =>
+                    x.From.AirportName == request.From &&
+                    x.To.AirportName == request.To &&
+                    x.DepartureTime.Substring(0, 10) == request.DepartureDate).ToList();
+
+                return new PageResult(flights);
             }
         }
 
