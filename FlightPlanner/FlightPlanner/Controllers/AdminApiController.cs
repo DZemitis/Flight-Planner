@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FlightPlanner.Controllers
 {
@@ -49,7 +48,6 @@ namespace FlightPlanner.Controllers
             {
                 if (!FlightStorage.IsValid(request))
                     return BadRequest();
-
 
                 if (Exists(request))
                     return Conflict();

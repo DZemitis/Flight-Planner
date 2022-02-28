@@ -10,7 +10,6 @@ namespace FlightPlanner.Storage
         private static List<Flight> _flights = new List<Flight>();
         private static int _id;
         private static readonly object _lock = new object();
-        private static readonly FlightPlannerDbContext _context;
 
         public static Flight AddFlight(AddFlightRequest request)
         {
