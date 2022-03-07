@@ -30,15 +30,37 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static PageResult SearchFlightReq(SearchFlightRequest request)
+        public static Flight ConvertToFlight(AddFlightRequest request)
         {
             lock (_lock)
             {
-                return new PageResult(_flights);
+                var flight = new Flight
+                {
+                    From = request.From,
+                    To = request.To,
+                    ArrivalTime = request.ArrivalTime,
+                    DepartureTime = request.DepartureTime,
+                    Carrier = request.Carrier,
+                };
+
+                return flight;
             }
         }
 
-        public static List<Airport> SearchAiport(string search)
+        public static PageResult SearchFlightReq(SearchFlightRequest request, FlightPlannerDbContext context)
+        {
+            lock (_lock)
+            {
+                var flights = context.Flights.Where(x =>
+                    x.From.AirportName == request.From &&
+                    x.To.AirportName == request.To &&
+                    x.DepartureTime.Substring(0, 10) == request.DepartureDate).ToList();
+
+                return new PageResult(flights);
+            }
+        }
+
+        public static List<Airport> SearchAirport(string search)
         {
             lock (_lock)
             {
@@ -147,5 +169,7 @@ namespace FlightPlanner.Storage
                 return true;
             }
         }
+
+
     }
 }
